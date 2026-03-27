@@ -33,7 +33,7 @@ export function buildClimateDiscovery(
     name: deviceName,
 
     // Object ID (used for entity naming)
-    default_entity_id: `nest_${serial}`,
+    default_entity_id: `climate.nest_${serial}`,
 
     // Device info (groups all entities together)
     device: {
@@ -117,7 +117,7 @@ export function buildTemperatureSensorDiscovery(
   return {
     unique_id: `nolongerevil_${serial}_temperature`,
     name: `Temperature`,
-    default_entity_id: `nest_${serial}_temperature`,
+    default_entity_id: `sensor.nest_${serial}_temperature`,
 
     device: {
       identifiers: [`nolongerevil_${serial}`],
@@ -148,7 +148,7 @@ export function buildHumiditySensorDiscovery(
   return {
     unique_id: `nolongerevil_${serial}_humidity`,
     name: `Humidity`,
-    default_entity_id: `nest_${serial}_humidity`,
+    default_entity_id: `sensor.nest_${serial}_humidity`,
 
     device: {
       identifiers: [`nolongerevil_${serial}`],
@@ -179,7 +179,7 @@ export function buildOutdoorTemperatureSensorDiscovery(
   return {
     unique_id: `nolongerevil_${serial}_outdoor_temperature`,
     name: `Outdoor Temperature`,
-    default_entity_id: `nest_${serial}_outdoor_temperature`,
+    default_entity_id: `sensor.nest_${serial}_outdoor_temperature`,
 
     device: {
       identifiers: [`nolongerevil_${serial}`],
@@ -210,7 +210,7 @@ export function buildOccupancyBinarySensorDiscovery(
   return {
     unique_id: `nolongerevil_${serial}_occupancy`,
     name: `Occupancy`,
-    default_entity_id: `nest_${serial}_occupancy`,
+    default_entity_id: `binary_sensor.nest_${serial}_occupancy`,
 
     device: {
       identifiers: [`nolongerevil_${serial}`],
@@ -242,7 +242,7 @@ export function buildFanBinarySensorDiscovery(
   return {
     unique_id: `nolongerevil_${serial}_fan`,
     name: `Fan`,
-    default_entity_id: `nest_${serial}_fan`,
+    default_entity_id: `binary_sensor.nest_${serial}_fan`,
 
     device: {
       identifiers: [`nolongerevil_${serial}`],
@@ -273,7 +273,7 @@ export function buildLeafBinarySensorDiscovery(
   return {
     unique_id: `nolongerevil_${serial}_leaf`,
     name: `Eco Mode`,
-    default_entity_id: `nest_${serial}_leaf`,
+    default_entity_id: `binary_sensor.nest_${serial}_leaf`,
 
     device: {
       identifiers: [`nolongerevil_${serial}`],
