@@ -706,38 +706,36 @@ export class MqttIntegration extends BaseIntegration {
       }
 
       // Outdoor temperature (already in Celsius)
-      let outdoorTempCelsius = device.outdoor_temperature ?? shared.outside_temperature ?? device.outside_temperature;
-
+      let outdoorTempCelsius =
+        device.outdoor_temperature ??
+        shared.outside_temperature ??
+        device.outside_temperature;
+      
       if (outdoorTempCelsius === undefined || outdoorTempCelsius === null) {
         try {
           const userWeather = await this.deviceStateManager.getUserWeather(this.userId);
-          if (userWeather?.current?.temp_c !== undefined) {
-            outdoorTempCelsius = userWeather.current.temp_c;
+      
+          if (userWeather && typeof userWeather === 'object') {
+            const weatherEntry = Object.values(userWeather).find(
+              (entry: any) => entry?.current?.temp_c !== undefined
+            ) as { current?: { temp_c?: number } } | undefined;
+      
+            if (weatherEntry?.current?.temp_c !== undefined) {
+              outdoorTempCelsius = weatherEntry.current.temp_c;
+            }
           }
         } catch (error) {
           console.error(`[MQTT:${this.userId}] Failed to get user weather for outdoor temp:`, error);
         }
       }
-
+      
       if (outdoorTempCelsius !== null && outdoorTempCelsius !== undefined) {
-        await this.publish(`${prefix}/${serial}/ha/outdoor_temperature`, String(outdoorTempCelsius), { retain: true, qos: 0 });
+        await this.publish(
+          `${prefix}/${serial}/ha/outdoor_temperature`,
+          String(outdoorTempCelsius),
+          { retain: true, qos: 0 }
+        );
       }
-
-      const isAway = await isDeviceAway(serial, this.deviceState);
-      await this.publish(`${prefix}/${serial}/ha/occupancy`, isAway ? 'away' : 'home', { retain: true, qos: 0 });
-
-      const fanRunning = await isFanRunning(serial, this.deviceState);
-      await this.publish(`${prefix}/${serial}/ha/fan_running`, String(fanRunning), { retain: true, qos: 0 });
-
-      const eco = await isEcoActive(serial, this.deviceState);
-      await this.publish(`${prefix}/${serial}/ha/eco`, String(eco), { retain: true, qos: 0 });
-
-      console.log(`[MQTT:${this.userId}] Successfully published HA state for ${serial}`);
-    } catch (error) {
-      console.error(`[MQTT:${this.userId}] Error publishing HA state for ${serial}:`, error);
-      throw error; // Re-throw to ensure errors are visible
-    }
-  }
 
   /**
    * Publish availability status
