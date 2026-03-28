@@ -705,21 +705,21 @@ export class MqttIntegration extends BaseIntegration {
         await this.publish(`${prefix}/${serial}/ha/preset`, preset, { retain: true, qos: 0 });
       }
 
-      // Outdoor temperature (already in Celsius)
+// Outdoor temperature (already in Celsius)
       let outdoorTempCelsius =
         device.outdoor_temperature ??
         shared.outside_temperature ??
         device.outside_temperature;
-      
+
       if (outdoorTempCelsius === undefined || outdoorTempCelsius === null) {
         try {
           const userWeather = await this.deviceStateManager.getUserWeather(this.userId);
-      
+
           if (userWeather && typeof userWeather === 'object') {
             const weatherEntry = Object.values(userWeather).find(
               (entry: any) => entry?.current?.temp_c !== undefined
             ) as { current?: { temp_c?: number } } | undefined;
-      
+
             if (weatherEntry?.current?.temp_c !== undefined) {
               outdoorTempCelsius = weatherEntry.current.temp_c;
             }
@@ -728,14 +728,13 @@ export class MqttIntegration extends BaseIntegration {
           console.error(`[MQTT:${this.userId}] Failed to get user weather for outdoor temp:`, error);
         }
       }
-      
+
       if (outdoorTempCelsius !== null && outdoorTempCelsius !== undefined) {
         await this.publish(
           `${prefix}/${serial}/ha/outdoor_temperature`,
           String(outdoorTempCelsius),
           { retain: true, qos: 0 }
         );
-      }
       }
     
   /**
