@@ -705,7 +705,7 @@ export class MqttIntegration extends BaseIntegration {
         await this.publish(`${prefix}/${serial}/ha/preset`, preset, { retain: true, qos: 0 });
       }
 
-// Outdoor temperature (already in Celsius)
+      // Outdoor temperature (already in Celsius)
       let outdoorTempCelsius =
         device.outdoor_temperature ??
         shared.outside_temperature ??
@@ -736,6 +736,22 @@ export class MqttIntegration extends BaseIntegration {
           { retain: true, qos: 0 }
         );
       }
+
+      const isAway = await isDeviceAway(serial, this.deviceState);
+      await this.publish(`${prefix}/${serial}/ha/occupancy`, isAway ? 'away' : 'home', { retain: true, qos: 0 });
+
+      const fanRunning = await isFanRunning(serial, this.deviceState);
+      await this.publish(`${prefix}/${serial}/ha/fan_running`, String(fanRunning), { retain: true, qos: 0 });
+
+      const eco = await isEcoActive(serial, this.deviceState);
+      await this.publish(`${prefix}/${serial}/ha/eco`, String(eco), { retain: true, qos: 0 });
+
+      console.log(`[MQTT:${this.userId}] Successfully published HA state for ${serial}`);
+    } catch (error) {
+      console.error(`[MQTT:${this.userId}] Error publishing HA state for ${serial}:`, error);
+      throw error; // Re-throw to ensure errors are visible
+    }
+  }
     
   /**
    * Publish availability status
