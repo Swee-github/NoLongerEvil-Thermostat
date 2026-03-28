@@ -736,7 +736,8 @@ export class MqttIntegration extends BaseIntegration {
           { retain: true, qos: 0 }
         );
       }
-
+      }
+    
   /**
    * Publish availability status
    */
