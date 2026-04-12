@@ -972,7 +972,7 @@ export class SQLite3Service extends AbstractDeviceStateManager {
     }
 
     try {
-      const sql = `UPDATE integrations SET config = ? where type = 'mqtt' and userId = '${environment.MQTT_DEFAULT_ID}'`;
+      const sql = `UPDATE integrations SET config = ?, enabled = 1 where type = 'mqtt' and userId = '${environment.MQTT_DEFAULT_ID}'`;
       await db.run(sql, [JSON.stringify(haSettings)]);
     } catch (error) {
       console.error('[SQLite3] Failed to update MQTT integration: ', error);
