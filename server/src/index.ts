@@ -379,7 +379,7 @@ async function mqttSetup(): Promise<void> {
   console.log('[MQTTInitialization] Checking for MQTT setup.');
 
   // Update enabled/disabled status.
-  await deviceStateManager.updateMqttStatus(environment.MQTT_ENABLED);
+  // await deviceStateManager.updateMqttStatus(environment.MQTT_ENABLED);
   // If enabled create/update the integration
   if (environment.MQTT_ENABLED && environment.NEST_DEVICES) {
     const mqtt_config = {
